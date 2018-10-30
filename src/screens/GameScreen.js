@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Button from "../Components/Button";
-import Boo from "../Components/SpookyBoo";
+import Button from "../components/Button";
+import Boo from "../components/SpookyBoo";
 
 export default class GameScreen extends Component {
   getHeight = clicks => {

@@ -5,7 +5,7 @@ import "./App.css";
 import firebase, { gameDB, playersDb } from "./firebase";
 import firebaseDbModel from "./firebaseDbModel";
 
-import Loading from "./Components/Loading";
+import Loading from "./components/Loading";
 import PlayerScreen from "./screens/PlayerScreen";
 import GameScreen from "./screens/GameScreen";
 import WinnerScreen from "./screens/WinnerScreen";
