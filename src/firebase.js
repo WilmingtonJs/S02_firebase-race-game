@@ -13,6 +13,7 @@ var config = {
 
 firebase.initializeApp(config);
 
-console.log("Firebase SDK version: ", firebase.SDK_VERSION);
+export const gameDB = firebase.database().ref("/game");
+export const playersDb = firebase.database().ref("/players");
 
 export default firebase;
