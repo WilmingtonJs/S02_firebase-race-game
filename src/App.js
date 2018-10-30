@@ -65,6 +65,58 @@ class App extends Component {
   // DATABASE METHODS |
   // ----
 
+  // Players Functions
+  joinGame = () => {
+    const { players, game } = this.state;
+    if (game.activePlayers < game.maxPlayers) {
+      const playersArray = Object.keys(players).map(
+        playerKey => players[playerKey]
+      );
+      const existingPlayer = playersArray.find(
+        player => player.uid === this.state.uid
+      );
+      const nextEmptySpot = playersArray.find(
+        player => player.uid === undefined
+      );
+      if (existingPlayer) {
+        this.setState({
+          playerId: existingPlayer.key
+        });
+      } else if (nextEmptySpot) {
+        this.playersDb.child(nextEmptySpot.key).update({
+          uid: this.state.uid
+        });
+        this.gameDB.child("activePlayers").set(game.activePlayers + 1);
+        this.setState({
+          playerId: nextEmptySpot.key
+        });
+      }
+    }
+  };
+
+  onTouch = () => {
+    const clickCount =
+      this.state.players[this.state.playerId] &&
+      this.state.players[this.state.playerId].clicks;
+    if (clickCount > 80) {
+      const winner = this.state.players[this.state.playerId];
+      this.gameDB.update({ winner });
+    }
+    this.playersDb.child(this.state.playerId).update({
+      clicks: clickCount + 1.5
+    });
+  };
+
+  // Game Functions
+  resetGame = () => {
+    playersDb.set(firebaseDbModel.players);
+    gameDB.set(firebaseDbModel.game);
+  };
+
+  toggleGameStatus = () => {
+    this.gameDB.child("active").set(!this.state.game.active);
+  };
+
   render() {
     return (
       <div className="App">
