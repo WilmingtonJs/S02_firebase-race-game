@@ -1,8 +1,15 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import { isBrowser } from "react-device-detect";
+
 import "./App.css";
 import firebase, { gameDB, playersDb } from "./firebase";
 import firebaseDbModel from "./firebaseDbModel";
+
+import Loading from "./Components/Loading";
+import PlayerScreen from "./screens/PlayerScreen";
+import GameScreen from "./screens/GameScreen";
+import WinnerScreen from "./screens/WinnerScreen";
+
 class App extends Component {
   state = {
     uid: null,
@@ -118,22 +125,37 @@ class App extends Component {
   };
 
   render() {
+    const { uid, game, players, playerId } = this.state;
+    const loading = uid != null && game != null && players != null;
+    const playerData = playerId ? players[playerId] : null;
+    const winner = game && game.winner;
+    const spotsAvailable = game && game.activePlayers < game.maxPlayers;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="fullScreen centered">
+        {!loading ? (
+          <Loading />
+        ) : winner ? (
+          <WinnerScreen
+            winner={winner}
+            playerWon={uid === winner.uid}
+            reset={this.reset}
+          />
+        ) : isBrowser ? (
+          <GameScreen
+            players={players}
+            reset={this.reset}
+            toggleGame={this.toggleGameStatus}
+            game={game}
+          />
+        ) : (
+          <PlayerScreen
+            joinGame={this.joinGame}
+            onTouch={this.onTouch}
+            playerData={playerData}
+            gameIsActive={game.active}
+            spotsAvailable={spotsAvailable}
+          />
+        )}
       </div>
     );
   }
