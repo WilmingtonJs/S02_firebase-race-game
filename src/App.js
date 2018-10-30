@@ -83,10 +83,10 @@ class App extends Component {
           playerId: existingPlayer.key
         });
       } else if (nextEmptySpot) {
-        this.playersDb.child(nextEmptySpot.key).update({
+        playersDb.child(nextEmptySpot.key).update({
           uid: this.state.uid
         });
-        this.gameDB.child("activePlayers").set(game.activePlayers + 1);
+        gameDB.child("activePlayers").set(game.activePlayers + 1);
         this.setState({
           playerId: nextEmptySpot.key
         });
@@ -100,9 +100,9 @@ class App extends Component {
       this.state.players[this.state.playerId].clicks;
     if (clickCount > 80) {
       const winner = this.state.players[this.state.playerId];
-      this.gameDB.update({ winner });
+      gameDB.update({ winner });
     }
-    this.playersDb.child(this.state.playerId).update({
+    playersDb.child(this.state.playerId).update({
       clicks: clickCount + 1.5
     });
   };
@@ -114,7 +114,7 @@ class App extends Component {
   };
 
   toggleGameStatus = () => {
-    this.gameDB.child("active").set(!this.state.game.active);
+    gameDB.child("active").set(!this.state.game.active);
   };
 
   render() {
