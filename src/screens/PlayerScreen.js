@@ -17,15 +17,17 @@ export default class PlayerScreen extends Component {
           <div
             className="centered"
             style={{ height: "80%", justifyContent: "space-between" }}
+            onClick={() => {
+              console.log("touched");
+              if (gameIsActive) {
+                onTouch();
+              }
+            }}
           >
             <h1>{playerData.name}</h1>
             <Boo bgColor={playerData.color} />
             <div className="centered">
-              {gameIsActive ? (
-                <Button onClick={onTouch}>Click Me!</Button>
-              ) : (
-                <div>Get Ready!</div>
-              )}
+              {gameIsActive ? <div>Go!</div> : <div>Get Ready!</div>}
             </div>
           </div>
         ) : (
